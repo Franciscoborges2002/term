@@ -13,5 +13,7 @@ When you are in a folder with git you can simple use the term "gs" to execute th
 
 ## Roadmap
 - [x] Simple base application.
+- [x] Add a option to list scripts
+- [x] Add a option to delete scripts
 - [ ] Instaed of ussing "(double quotes) to the second parameter, can add the command without " as well
 - [ ] Can add folders into the terms.

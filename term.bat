@@ -8,7 +8,58 @@ set "MAIN_DIR=C:\term"
 if "%~1"=="" (
     echo No parameters have been provided.
     echo Usage: term script_name command
+    ECHO or use "term help"
     exit /b 1
+)
+
+:: Check if the command is 'help'
+if /i "%~1"=="help" (
+    echo.
+echo Available commands:
+echo   term help                            : Show help message.
+echo   term list                            : Show all terms.
+echo   term delete [or -D] script_name      : Delete a term user previously added.
+echo   term script_name command             : Create a new term.
+echo.
+exit /b 0
+)
+
+:: Check if the command is 'list'
+if /i "%~1"=="list" (
+    echo Listing .bat files in %MAIN_DIR%:
+    dir /b "%MAIN_DIR%\*.bat"
+    exit /b 0
+)
+
+:: Check if the command is 'delete' or '-D'
+if /i "%~1"=="delete" (
+    set "SCRIPT_NAME=%~2"
+) else if /i "%~1"=="-D" (
+    set "SCRIPT_NAME=%~2"
+) else (
+    set "SCRIPT_NAME="
+)
+
+:: If the script name is provided for deletion, need to improve this code
+if defined SCRIPT_NAME (
+    if "%SCRIPT_NAME%"=="" (
+        echo No script name provided for deletion.
+        echo Usage: term delete script_name OR term -D script_name
+        exit /b 1
+    )
+
+    set "SCRIPT_TO_DELETE=%MAIN_DIR%\%SCRIPT_NAME%.bat"
+
+    ::echo "%SCRIPT_TO_DELETE%"
+    ::echo %MAIN_DIR%\%SCRIPT_NAME%.bat
+
+    if exist "%MAIN_DIR%\%SCRIPT_NAME%.bat" (
+        del "%MAIN_DIR%\%SCRIPT_NAME%.bat"
+        echo Script %SCRIPT_NAME%.bat deleted successfully from %MAIN_DIR%.
+    ) else (
+        echo Script %SCRIPT_NAME%.bat does not exist in %MAIN_DIR%.
+    )
+    exit /b 0
 )
 
 :: Count how many args are in the command
@@ -17,8 +68,13 @@ for %%x in (%*) do Set /A argC+=1
 :: Set the arguments into vars
 SET COMMAND_NAME=%~1
 SET "COMMAND="
-::Remove the first parameter from the arguments of the command to execute
 
+:: If is less than 2, drop error, that needs to give another argument
+if %argC% lss 2 (
+    echo No script to add to the command
+    ECHO Use "term help"
+    exit /b 1
+)
 
 :: Check if user used double quote or not
 if %argC% gtr 2 (
