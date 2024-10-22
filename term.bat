@@ -7,8 +7,7 @@ set "MAIN_DIR=C:\term"
 :: Check if parameters are provided
 if "%~1"=="" (
     echo No parameters have been provided.
-    echo Usage: term script_name command
-    ECHO or use "term help"
+    echo Usage: term script_name command or use "term help"
     exit /b 1
 )
 
@@ -16,12 +15,31 @@ if "%~1"=="" (
 if /i "%~1"=="help" (
     echo.
 echo Available commands:
-echo   term help                            : Show help message.
-echo   term list                            : Show all terms.
-echo   term delete [or -D] script_name      : Delete a term user previously added.
-echo   term script_name command             : Create a new term.
+echo   term help                          : Show help message.
+echo   term list                          : Show all terms.
+echo   term show term_name                : Show the script of a specific term.
+echo   term delete [or -D] term_name      : Delete a term user previously added.
+echo   term term_name command             : Create a new term.
 echo.
 exit /b 0
+)
+
+:: Check if the command is 'show'
+if /i "%~1"=="show" (
+    if "%~2"=="" (
+        echo No script name provided for display.
+        echo Usage: term show script_name or use "term help"
+        exit /b 1
+    )
+
+    if exist "%MAIN_DIR%\%~2.bat" (
+        echo Displaying the content of %~2.bat:
+        type "%MAIN_DIR%\%~2.bat"
+    ) else (
+        echo Script %~2.bat does not exist in %MAIN_DIR%.
+    )
+    
+    exit /b 0
 )
 
 :: Check if the command is 'list'
