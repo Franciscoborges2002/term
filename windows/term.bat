@@ -44,7 +44,7 @@ if /i "%~1"=="show" (
 
 :: Check if the command is 'list'
 if /i "%~1"=="list" (
-    echo Listing .bat files in %MAIN_DIR%:
+    echo List of all terms:
     dir /b "%MAIN_DIR%\*.bat"
     exit /b 0
 )
